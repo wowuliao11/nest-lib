@@ -1,0 +1,1 @@
+{"version":3,"file":"nacos.module.js","sourceRoot":"","sources":["../src/nacos.module.ts"],"names":[],"mappings":";;;;;;;;;AAAA,2CAAgD;AAChD,mDAA+C;AAC/C,uEAA6D;AAMtD,IAAM,WAAW,GAAjB,MAAM,WAAY,SAAQ,0CAAgB;CAAG,CAAA;AAAvC,kCAAW;sBAAX,WAAW;IALvB,IAAA,eAAM,GAAE;IACR,IAAA,eAAM,EAAC;QACN,SAAS,EAAE,CAAC,4BAAY,CAAC;QACzB,OAAO,EAAE,CAAC,4BAAY,CAAC;KACxB,CAAC;GACW,WAAW,CAA4B"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"nacos.interface.d.ts","sourceRoot":"","sources":["../src/nacos.interface.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,kBAAkB;IACjC,YAAY,EAAE,MAAM,CAAC;IACrB,GAAG,EAAE,OAAO,CAAC;IACb,IAAI,EAAE,MAAM,CAAC;IACb,IAAI,EAAE,MAAM,CAAC;IACb,SAAS,EAAE,MAAM,CAAC;IAClB,SAAS,EAAE,MAAM,CAAC;IAClB,SAAS,EAAE,MAAM,CAAC;CACnB"}
