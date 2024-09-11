@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Jest Tests (nacos.spec.ts)",
+      "runtimeExecutable": "npm",
+      "args": ["run", "test"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}/packages/nacos"
+    }
+  ]
+}

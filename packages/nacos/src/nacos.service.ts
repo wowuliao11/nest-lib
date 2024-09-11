@@ -17,6 +17,8 @@ export class NacosService implements OnModuleDestroy {
   private secretKey: string;
   private ssl: boolean;
   private defaultGroup: string;
+
+  private listenerSet = new Set<{ dataId: string; group: string }>();
   configMap: Map<string, any> = new Map();
 
   constructor(
@@ -42,11 +44,12 @@ export class NacosService implements OnModuleDestroy {
     if (isEmpty(this.secretKey))
       throw new Error("nacos secretKey must not be null!");
     const options: ClientOptions = {
-      serverAddr: `${this.host}:${this.port}`,
+      serverAddr: this.host,
+      serverPort: this.port,
       namespace: this.namespace,
       accessKey: this.accessKey,
       secretKey: this.secretKey,
-      ssl: initOptions.ssl ?? false,
+      ssl: this.ssl,
     };
 
     if (/^http/.test(this.host)) {
@@ -71,6 +74,25 @@ export class NacosService implements OnModuleDestroy {
     }
   }
 
+  async deleteConfig(dataId: string, group = this.defaultGroup): Promise<void> {
+    await this.configClient.remove(dataId, group);
+    this.configMap.delete(`${group}-${dataId}`);
+  }
+
+  async setJsonConfig(
+    dataId: string,
+    content: any,
+    group = this.defaultGroup
+  ): Promise<void> {
+    this.configMap.set(`${group}-${dataId}`, content);
+
+    await this.configClient.publishSingle(
+      dataId,
+      group,
+      JSON.stringify(content)
+    );
+  }
+
   async getConfig(key: string, group = this.defaultGroup): Promise<string> {
     if (this.configMap.has(`${group}-${key}`)) {
       return this.configMap.get(`${group}-${key}`);
@@ -90,6 +112,7 @@ export class NacosService implements OnModuleDestroy {
     if (isEmpty(content)) return undefined;
     if (initFunc === undefined) return content;
     this.callInitFunc(content, initFunc, isJson);
+    this.listenerSet.add({ dataId, group });
     this.configClient.subscribe({ dataId, group }, (content) => {
       this.logger.log({
         title: "nacos config changed",
@@ -181,5 +204,12 @@ export class NacosService implements OnModuleDestroy {
     this.logger.log("nacos register");
 
     return true;
+  }
+
+  async configUnregister() {
+    for (const listener of this.listenerSet) {
+      await this.configClient.unsubscribe(listener);
+    }
+    await this, this.configClient.close();
   }
 }

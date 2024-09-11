@@ -1,4 +1,5 @@
-export function safeParseJson(json: string) {
+export function safeParseJson(json: string | any) {
+  if (typeof json === "object") return json;
   try {
     return JSON.parse(json);
   } catch (e) {
