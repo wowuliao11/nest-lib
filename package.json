@@ -5,6 +5,6 @@
     "lerna": "^8.1.8"
   },
   "scripts": {
-    "publish": "lerna run build && lerna publish from-package --yes"
+    "publish": "lerna run build && git commit -am 'lerna build before publish' &&lerna publish from-package --yes"
   }
 }

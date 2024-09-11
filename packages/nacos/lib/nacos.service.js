@@ -21,9 +21,10 @@ const nacos_module_definition_1 = require("./nacos.module-definition");
 const util_1 = require("./util/util");
 let NacosService = NacosService_1 = class NacosService {
     constructor(initOptions) {
-        var _a, _b, _c;
+        var _a, _b;
         this.initOptions = initOptions;
         this.logger = new common_1.Logger(NacosService_1.name);
+        this.listenerSet = new Set();
         this.configMap = new Map();
         this.defaultGroup = (_a = initOptions.defaultGroup) !== null && _a !== void 0 ? _a : "DEFAULT_GROUP";
         this.host = initOptions.host;
@@ -41,11 +42,12 @@ let NacosService = NacosService_1 = class NacosService {
         if ((0, util_1.isEmpty)(this.secretKey))
             throw new Error("nacos secretKey must not be null!");
         const options = {
-            serverAddr: `${this.host}:${this.port}`,
+            serverAddr: this.host,
+            serverPort: this.port,
             namespace: this.namespace,
             accessKey: this.accessKey,
             secretKey: this.secretKey,
-            ssl: (_c = initOptions.ssl) !== null && _c !== void 0 ? _c : false,
+            ssl: this.ssl,
         };
         if (/^http/.test(this.host)) {
             // http格式转化成hostname
@@ -63,6 +65,14 @@ let NacosService = NacosService_1 = class NacosService {
             return (0, util_1.safeParseJson)(this.configMap.get(`${group}-${key}`));
         }
     }
+    async deleteConfig(dataId, group = this.defaultGroup) {
+        await this.configClient.remove(dataId, group);
+        this.configMap.delete(`${group}-${dataId}`);
+    }
+    async setJsonConfig(dataId, content, group = this.defaultGroup) {
+        this.configMap.set(`${group}-${dataId}`, content);
+        await this.configClient.publishSingle(dataId, group, JSON.stringify(content));
+    }
     async getConfig(key, group = this.defaultGroup) {
         if (this.configMap.has(`${group}-${key}`)) {
             return this.configMap.get(`${group}-${key}`);
@@ -79,6 +89,7 @@ let NacosService = NacosService_1 = class NacosService {
         if (initFunc === undefined)
             return content;
         this.callInitFunc(content, initFunc, isJson);
+        this.listenerSet.add({ dataId, group });
         this.configClient.subscribe({ dataId, group }, (content) => {
             this.logger.log({
                 title: "nacos config changed",
@@ -157,6 +168,12 @@ let NacosService = NacosService_1 = class NacosService {
         });
         this.logger.log("nacos register");
         return true;
+    }
+    async configUnregister() {
+        for (const listener of this.listenerSet) {
+            await this.configClient.unsubscribe(listener);
+        }
+        await this, this.configClient.close();
     }
 };
 exports.NacosService = NacosService;

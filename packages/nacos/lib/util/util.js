@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.safeParseJson = safeParseJson;
 exports.isEmpty = isEmpty;
 function safeParseJson(json) {
+    if (typeof json === "object")
+        return json;
     try {
         return JSON.parse(json);
     }
