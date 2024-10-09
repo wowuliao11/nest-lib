@@ -16,10 +16,6 @@
   "files": [
     "lib"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wowuliao11/nest-lib"
-  },
   "keywords": [],
   "author": "wowuliao <wowuliao@outlook.com>",
   "publishConfig": {
