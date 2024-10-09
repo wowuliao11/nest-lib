@@ -1,5 +1,5 @@
 {
-  "name": "@wowuliao/nest-nacos1",
+  "name": "@on/nest-nacos1",
   "version": "0.0.22",
   "description": "",
   "main": "lib/index.js",
