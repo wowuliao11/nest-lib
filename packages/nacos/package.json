@@ -1,6 +1,6 @@
 {
   "name": "@on-cn/nest-nacos1",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
