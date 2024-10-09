@@ -32,7 +32,6 @@ export class NacosService implements OnModuleDestroy {
     this.accessKey = initOptions.accessKey;
     this.secretKey = initOptions.secretKey;
     this.ssl = initOptions.ssl ?? false;
-
     if (isEmpty(this.host)) throw new Error("nacos server must not be null!");
 
     if (isEmpty(this.namespace))
