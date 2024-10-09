@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^8.1.8"
+    "lerna": "^8.1.8",
+    "typescript": "^5.6.3"
   },
   "scripts": {
     "publish": "lerna run build && git commit -am 'lerna build before publish' && lerna version patch && lerna publish from-package --yes"
